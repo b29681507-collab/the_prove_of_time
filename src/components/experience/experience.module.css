@@ -1,0 +1,1808 @@
+/* Layer scale: atmosphere 0, phase 2, persistent method state 8, detail 20. */
+
+.experience {
+  --experience-bg: oklch(0.12 0.012 72);
+  --experience-ink: oklch(0.94 0.024 82);
+  --experience-muted: oklch(0.76 0.028 78);
+  --experience-faint: oklch(0.62 0.024 74);
+  --experience-accent: oklch(0.84 0.055 82);
+  --experience-accent-strong: oklch(0.91 0.042 84);
+  --experience-accent-soft: oklch(0.84 0.055 82 / 0.12);
+  --experience-line: oklch(0.82 0.03 80 / 0.28);
+  --experience-line-strong: oklch(0.82 0.03 80 / 0.5);
+  --experience-paper: oklch(0.21 0.018 68);
+  --experience-paper-raised: oklch(0.25 0.021 70);
+  --experience-paper-ink: oklch(0.92 0.022 82);
+  position: relative;
+  display: grid;
+  width: 100%;
+  min-width: 320px;
+  min-height: 100dvh;
+  height: 100dvh;
+  grid-template-rows: 3.75rem minmax(0, 1fr);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--experience-bg);
+  color: var(--experience-ink);
+}
+
+.experience button {
+  color: inherit;
+  font: inherit;
+}
+
+.experience button:focus-visible,
+.experience a:focus-visible,
+.experience h2:focus-visible {
+  outline: 2px solid var(--experience-accent-strong);
+  outline-offset: 4px;
+}
+
+.experience button:disabled {
+  cursor: default;
+  opacity: 0.38;
+}
+
+.stage,
+.world {
+  position: relative;
+  min-height: 0;
+}
+
+.world {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.ambientField {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background:
+    radial-gradient(circle at 16% 14%, oklch(0.29 0.025 72 / 0.17), transparent 31%),
+    radial-gradient(circle at 84% 78%, oklch(0.24 0.024 66 / 0.12), transparent 34%),
+    var(--experience-bg);
+  pointer-events: none;
+}
+
+.storyButton {
+  display: inline-flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  padding: 0.78rem 1.12rem;
+  border: 0;
+  border-radius: 2px;
+  background: var(--experience-accent);
+  color: var(--experience-bg) !important;
+  font-size: 0.8rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background 180ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.storyButton:hover:not(:disabled) {
+  background: var(--experience-accent-strong);
+  transform: translateY(-2px);
+}
+
+.storyButton:active:not(:disabled) {
+  transform: translateY(0) scale(0.985);
+}
+
+.methodIndicator,
+.caseFlag {
+  position: absolute;
+  z-index: 8;
+  top: 0.85rem;
+  margin: 0;
+  pointer-events: none;
+}
+
+.methodIndicator {
+  left: clamp(1rem, 3vw, 2.75rem);
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+}
+
+.methodIndicator span,
+.caseFlag small {
+  color: var(--experience-faint);
+  font-size: 0.62rem;
+}
+
+.methodIndicator strong {
+  color: var(--experience-ink);
+  font-size: 0.72rem;
+  font-weight: 560;
+}
+
+.caseFlag {
+  right: clamp(1rem, 3vw, 2.75rem);
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--experience-muted);
+  font-size: 0.66rem;
+}
+
+.caseFlag small {
+  padding: 0.15rem 0.35rem;
+  border: 1px solid var(--experience-line);
+}
+
+.phaseLayer {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  scrollbar-gutter: stable;
+  transition:
+    opacity 380ms cubic-bezier(0.25, 1, 0.5, 1),
+    visibility 380ms;
+}
+
+.phaseLayer[aria-hidden="false"] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Intro and case contract */
+
+.introLayer {
+  display: grid;
+  align-items: center;
+  padding: clamp(2rem, 5vw, 5rem) clamp(1.5rem, 8vw, 8rem);
+}
+
+.introContent {
+  width: min(100%, 64rem);
+}
+
+.introContent h1 {
+  max-width: 16ch;
+  margin: 0;
+  font-size: clamp(2.7rem, 5.7vw, 5.5rem);
+  font-weight: 520;
+  letter-spacing: -0.036em;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.introContent h1 span {
+  display: block;
+}
+
+.introLead {
+  max-width: 54ch;
+  margin: clamp(1.2rem, 2.6vh, 2rem) 0 0 clamp(1.5rem, 9vw, 8rem);
+  color: var(--experience-muted);
+  font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.caseContract {
+  display: grid;
+  width: min(100%, 38rem);
+  gap: 0.45rem;
+  margin: clamp(1.4rem, 3.5vh, 2.5rem) 0 0 clamp(1.5rem, 9vw, 8rem);
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--experience-line);
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.caseContract > span {
+  color: var(--experience-accent-strong);
+  font-size: 0.72rem;
+  font-weight: 620;
+}
+
+.caseContract p,
+.caseContract small {
+  margin: 0;
+  line-height: 1.55;
+}
+
+.caseContract p {
+  color: var(--experience-ink);
+  font-size: 0.78rem;
+}
+
+.caseContract small {
+  color: var(--experience-faint);
+  font-size: 0.66rem;
+}
+
+.introContent > .storyButton {
+  margin: clamp(1.3rem, 3vh, 2.2rem) 0 0 clamp(1.5rem, 9vw, 8rem);
+}
+
+/* Question framing */
+
+.questionLayer {
+  display: grid;
+  align-items: center;
+  padding: clamp(5rem, 8vw, 7rem) clamp(1.5rem, 7vw, 7rem) clamp(2rem, 5vw, 4rem);
+}
+
+.questionContent {
+  display: grid;
+  width: min(100%, 72rem);
+  margin-inline: auto;
+}
+
+.questionOwner {
+  margin: 0 0 0.75rem;
+  color: var(--experience-accent);
+  font-size: 0.76rem;
+}
+
+.question {
+  max-width: 23ch;
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: clamp(2.2rem, 4.4vw, 4.7rem);
+  font-weight: 520;
+  letter-spacing: -0.036em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.questionBoundary {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  width: min(100%, 62rem);
+  margin-top: clamp(2rem, 5vh, 3.6rem);
+  padding-top: 1.1rem;
+  border-top: 1px solid var(--experience-line);
+}
+
+.questionBoundary p {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.questionBoundary span {
+  color: var(--experience-accent-strong);
+  font-size: 0.66rem;
+}
+
+.questionContent > .storyButton {
+  justify-self: start;
+  margin-top: 1.6rem;
+}
+
+.experience[data-phase="opening_past"] .questionBoundary,
+.experience[data-phase="opening_past"] .questionContent > .storyButton {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Natural-language evidence plan */
+
+.planLayer {
+  padding: clamp(5.2rem, 8vw, 7rem) clamp(1.5rem, 7vw, 7rem) 3rem;
+}
+
+.planContent {
+  display: grid;
+  width: min(100%, 74rem);
+  margin-inline: auto;
+  grid-template-columns: minmax(16rem, 0.72fr) minmax(0, 1.28fr);
+  column-gap: clamp(2rem, 6vw, 6rem);
+  align-items: start;
+}
+
+.planContent header {
+  position: sticky;
+  top: 0;
+}
+
+.planContent header p,
+.collectionContent > p,
+.interpretationContent > header > p,
+.reconstructionContent > header > p,
+.reentryContent > header > p {
+  margin: 0 0 0.65rem;
+  color: var(--experience-accent);
+  font-size: 0.72rem;
+}
+
+.planContent h2,
+.collectionContent h2,
+.interpretationContent h2,
+.reconstructionContent h2,
+.reentryContent h2 {
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: clamp(1.9rem, 3.5vw, 3.7rem);
+  font-weight: 520;
+  letter-spacing: -0.032em;
+  line-height: 1.14;
+  text-wrap: balance;
+}
+
+.evidencePlan {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: plan;
+}
+
+.evidencePlan li {
+  display: grid;
+  grid-template-columns: 10rem minmax(0, 1fr);
+  gap: 1rem;
+  align-items: baseline;
+  padding: 1rem 0;
+  border-top: 1px solid var(--experience-line);
+  counter-increment: plan;
+}
+
+.evidencePlan li:last-child {
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.evidencePlan li::before {
+  position: absolute;
+  content: "";
+}
+
+.evidencePlan li > span {
+  color: var(--experience-faint);
+  font-size: 0.64rem;
+}
+
+.evidencePlan li > span::before {
+  margin-right: 0.6rem;
+  color: var(--experience-muted);
+  content: counter(plan, decimal-leading-zero);
+}
+
+.evidencePlan li p {
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: clamp(0.85rem, 1.25vw, 1rem);
+  line-height: 1.55;
+}
+
+.evidencePlan li[data-kind="counter"] {
+  background: linear-gradient(90deg, var(--experience-accent-soft), transparent 72%);
+}
+
+.evidencePlan li[data-kind="counter"] > span,
+.evidencePlan li[data-kind="counter"] > span::before {
+  color: var(--experience-accent-strong);
+}
+
+.planGate {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.3rem;
+}
+
+.planGate > p {
+  max-width: 45ch;
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.7rem;
+  line-height: 1.55;
+}
+
+/* Collection gate */
+
+.collectionLayer {
+  display: grid;
+  align-items: center;
+  padding: 4rem clamp(1.5rem, 7vw, 7rem);
+}
+
+.collectionContent {
+  width: min(100%, 56rem);
+  margin-inline: auto;
+}
+
+.collectionContent h2 {
+  max-width: 16ch;
+}
+
+.searchPulse {
+  display: block;
+  width: min(100%, 44rem);
+  height: 1px;
+  margin-top: clamp(2.5rem, 7vh, 5rem);
+  background: var(--experience-accent);
+  transform-origin: left center;
+}
+
+.collectionContent small {
+  display: block;
+  margin-top: 0.9rem;
+  color: var(--experience-muted);
+  font-size: 0.7rem;
+}
+
+/* Sequential evidence review */
+
+.evidenceLayer {
+  padding: 4.7rem clamp(1.25rem, 5vw, 5rem) 2.2rem;
+}
+
+.evidenceContent {
+  display: grid;
+  width: min(100%, 78rem);
+  min-height: 100%;
+  margin-inline: auto;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: 1.2rem;
+}
+
+.evidenceSceneHeader {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.evidenceSceneHeader h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(1.55rem, 2.7vw, 2.7rem);
+  font-weight: 520;
+  letter-spacing: -0.028em;
+  line-height: 1.15;
+}
+
+.evidenceSceneHeader p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.7rem;
+  line-height: 1.55;
+  text-align: right;
+}
+
+.memoryFragment {
+  display: grid;
+  align-content: center;
+  min-height: 0;
+}
+
+.evidenceProgress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+  color: var(--experience-faint);
+  font-size: 0.62rem;
+}
+
+.evidenceProgress strong {
+  color: var(--experience-accent-strong);
+  font-size: 0.68rem;
+  font-weight: 580;
+}
+
+.memoryFragment[data-role="counter"] .evidenceProgress strong {
+  padding: 0.2rem 0.42rem;
+  background: var(--experience-accent-soft);
+}
+
+.evidenceStage {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.82fr) minmax(0, 1.18fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: stretch;
+}
+
+.memoryPaper {
+  display: flex;
+  min-height: clamp(15rem, 38vh, 21rem);
+  flex-direction: column;
+  padding: clamp(1.2rem, 2.5vw, 2rem);
+  border: 0;
+  border-radius: 2px;
+  background: var(--experience-paper);
+  box-shadow: 0 4px 8px oklch(0.02 0.01 70 / 0.24);
+  color: var(--experience-paper-ink);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 180ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.memoryPaper:hover:not(:disabled) {
+  background: var(--experience-paper-raised);
+  transform: translateY(-3px);
+}
+
+.memoryMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--experience-accent);
+  font-size: 0.62rem;
+}
+
+.memoryQuote {
+  display: -webkit-box;
+  margin-top: clamp(1.1rem, 2.7vh, 1.8rem);
+  overflow: hidden;
+  color: var(--experience-paper-ink);
+  font-size: clamp(1rem, 1.7vw, 1.35rem);
+  line-height: 1.56;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 6;
+}
+
+.memoryQuote mark,
+.memoryDetailQuote mark {
+  padding: 0 0.08em;
+  background: transparent;
+  color: var(--experience-accent-strong);
+}
+
+.memorySource {
+  display: block;
+  margin-top: auto;
+  padding-top: 1.5rem;
+  color: var(--experience-muted);
+  font-size: 0.6rem;
+  line-height: 1.45;
+}
+
+.memoryTouch {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--experience-accent);
+  font-size: 0.58rem;
+}
+
+.evidenceMethod {
+  display: grid;
+  align-content: center;
+}
+
+.evidenceMethod > p,
+.evidenceBoundary {
+  margin: 0;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--experience-line);
+}
+
+.evidenceMethod > p {
+  display: grid;
+  grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 0.65fr);
+  gap: 1rem;
+  color: var(--experience-ink);
+  font-size: 0.76rem;
+  line-height: 1.55;
+}
+
+.selectionReason {
+  color: var(--experience-ink);
+}
+
+.evidenceMethod > p > span,
+.evidenceBoundary p > span,
+.detailMethod p > span,
+.observationList > span,
+.simpleHypothesis > span,
+.candidateHypothesis > span,
+.nonClaims > span,
+.recordedResponse > span,
+.recordedCaseResponse > span,
+.relationReceipt span,
+.methodReceipt > span,
+.retentionReceipt span,
+.capabilityReceipt > span {
+  color: var(--experience-faint);
+  font-size: 0.64rem;
+}
+
+.publicObservation {
+  color: var(--experience-accent-strong) !important;
+}
+
+.evidenceBoundary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.evidenceBoundary p {
+  display: grid;
+  gap: 0.42rem;
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.7rem;
+  line-height: 1.5;
+}
+
+.understandingShift {
+  border-bottom: 1px solid var(--experience-line);
+  color: var(--experience-accent) !important;
+}
+
+.evidenceNavigation {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.evidenceTrail {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.evidenceTrail span {
+  display: grid;
+  width: 1.7rem;
+  height: 1.7rem;
+  border: 1px solid var(--experience-line);
+  color: var(--experience-faint);
+  font-size: 0.58rem;
+  place-items: center;
+}
+
+.evidenceTrail span[data-seen="true"] {
+  border-color: var(--experience-accent);
+  color: var(--experience-ink);
+}
+
+.evidenceTrail span[data-role="counter"][data-seen="true"] {
+  background: var(--experience-accent-soft);
+  color: var(--experience-accent-strong);
+}
+
+/* Evidence detail dialog */
+
+.memoryDetailBackdrop {
+  position: fixed;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: oklch(0.05 0.01 70 / 0.86);
+  place-items: center;
+}
+
+.memoryDetail {
+  width: min(100%, 48rem);
+  max-height: min(84vh, 50rem);
+  padding: clamp(1.2rem, 3.5vw, 2.4rem);
+  overflow-y: auto;
+  border: 1px solid var(--experience-line-strong);
+  border-radius: 2px;
+  background: var(--experience-paper-raised);
+  color: var(--experience-paper-ink);
+}
+
+.memoryDetailHeader {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.memoryDetailHeader > div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.memoryDetailHeader > div > span,
+.memoryDetailHeader time {
+  color: var(--experience-accent-strong);
+  font-size: 0.7rem;
+}
+
+.memoryDetailHeader p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.65rem;
+}
+
+.memoryDetailHeader button {
+  min-height: 44px;
+  padding: 0 0.2rem;
+  border: 0;
+  border-bottom: 1px solid var(--experience-line);
+  background: transparent;
+  color: var(--experience-muted);
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.memoryDetailQuote {
+  margin: clamp(1.6rem, 4vh, 2.8rem) 0 0;
+  color: var(--experience-paper-ink);
+  font-size: clamp(1.3rem, 2.7vw, 2rem);
+  line-height: 1.48;
+}
+
+.detailMethod {
+  display: grid;
+  gap: 0;
+  margin-top: 2rem;
+}
+
+.detailMethod > p {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--experience-line);
+  color: var(--experience-muted);
+  font-size: 0.72rem;
+  line-height: 1.55;
+}
+
+.detailMethod .evidenceBoundary {
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.relatedRecord {
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--experience-line);
+}
+
+.relatedMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--experience-muted);
+  font-size: 0.62rem;
+}
+
+.relatedRecord blockquote {
+  margin: 0.8rem 0 0;
+  color: var(--experience-paper-ink);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+.relatedRecord > p {
+  margin: 0.65rem 0 0;
+  color: var(--experience-muted);
+  font-size: 0.7rem;
+}
+
+/* Observation, hypothesis, and response protocol */
+
+.interpretationScene {
+  padding: 4.7rem clamp(1.25rem, 5vw, 5rem) 2.5rem;
+}
+
+.interpretationContent,
+.correctionLayer {
+  width: min(100%, 78rem);
+  margin-inline: auto;
+}
+
+.interpretationContent > header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.interpretationContent > header h2 {
+  max-width: 19ch;
+  font-size: clamp(1.65rem, 3vw, 3rem);
+}
+
+.observationList {
+  display: grid;
+  grid-template-columns: 9rem repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.3rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--experience-line);
+  border-bottom: 1px solid var(--experience-line);
+}
+
+/* Kept for the standalone thread study component; the current sequence uses
+   explicit evidence stages instead of drawing a connection before review. */
+.connectionThread {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.threadLive {
+  fill: none;
+  stroke: var(--experience-line-strong);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.observationList p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.hypothesisTrack {
+  display: grid;
+  grid-template-columns: minmax(0, 0.74fr) minmax(0, 1.26fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin-top: 1.4rem;
+  align-items: stretch;
+}
+
+.simpleHypothesis,
+.candidateHypothesis {
+  display: grid;
+  align-content: start;
+  gap: 0.7rem;
+  padding: 1rem 0;
+}
+
+.simpleHypothesis {
+  border-top: 1px solid var(--experience-line);
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.simpleHypothesis p {
+  margin: 0;
+  color: var(--experience-faint);
+  font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+  line-height: 1.5;
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}
+
+.candidateHypothesis {
+  padding: 1rem clamp(1rem, 2.5vw, 2rem);
+  background: var(--experience-accent-soft);
+}
+
+.candidateHypothesis > span {
+  color: var(--experience-accent-strong);
+}
+
+.candidateHypothesis blockquote {
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: clamp(1.1rem, 2vw, 1.65rem);
+  line-height: 1.48;
+}
+
+.hypothesisEvidence {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin-top: 1rem;
+}
+
+.citationStrip,
+.nonClaims {
+  display: grid;
+  align-content: start;
+}
+
+.citationStrip p,
+.nonClaims p {
+  margin: 0;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--experience-line);
+  color: var(--experience-muted);
+  font-size: 0.64rem;
+  line-height: 1.5;
+}
+
+.citationStrip time {
+  display: inline-block;
+  width: 6rem;
+  color: var(--experience-accent);
+}
+
+.citationStrip q::before,
+.citationStrip q::after {
+  color: var(--experience-faint);
+}
+
+.nonClaims > span {
+  display: block;
+  padding-bottom: 0.45rem;
+}
+
+.correctionLayer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--experience-line-strong);
+}
+
+.correctionLayer[aria-hidden="true"] {
+  display: none;
+}
+
+.correctionHeading,
+.workbenchHeading {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 0.9rem;
+}
+
+.correctionHeading > div,
+.workbenchHeading > div {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.correctionHeading h2,
+.workbenchHeading h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 560;
+}
+
+.correctionHeading p,
+.workbenchHeading p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.67rem;
+  line-height: 1.5;
+}
+
+.correctionHeading > span {
+  color: var(--experience-accent-strong);
+  font-size: 0.66rem;
+}
+
+.interpretationChoices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.interpretationChoices button,
+.evidenceAuditChoices button,
+.issueChoices button {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  min-height: 64px;
+  padding: 0.75rem;
+  border: 1px solid var(--experience-line);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--experience-ink);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 180ms cubic-bezier(0.25, 1, 0.5, 1),
+    background 180ms cubic-bezier(0.25, 1, 0.5, 1),
+    transform 180ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.interpretationChoices button:hover:not(:disabled),
+.evidenceAuditChoices button:hover:not(:disabled),
+.issueChoices button:hover:not(:disabled) {
+  border-color: var(--experience-accent);
+  background: var(--experience-accent-soft);
+  transform: translateY(-2px);
+}
+
+.interpretationChoices strong,
+.issueChoices strong {
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.interpretationChoices span,
+.issueChoices span {
+  color: var(--experience-muted);
+  font-size: 0.6rem;
+  line-height: 1.4;
+}
+
+.interpretationChoices .correctionChoice {
+  border-color: var(--experience-accent);
+  background: var(--experience-accent-soft);
+}
+
+.correctionWorkbench {
+  display: grid;
+}
+
+.workbenchHeading > button,
+.workbenchActions > button:not(.storyButton),
+.reentryActions > button:not(.storyButton),
+.endingActions > button {
+  min-height: 44px;
+  padding: 0.55rem 0.2rem;
+  border: 0;
+  border-bottom: 1px solid var(--experience-line);
+  background: transparent;
+  color: var(--experience-muted);
+  font-size: 0.66rem;
+  cursor: pointer;
+}
+
+.evidenceAuditChoices {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.evidenceAuditChoices button {
+  min-height: 76px;
+}
+
+.evidenceAuditChoices button[aria-pressed="true"],
+.issueChoices button[aria-pressed="true"] {
+  border-color: var(--experience-accent-strong);
+  background: var(--experience-accent-soft);
+}
+
+.evidenceAuditChoices button > span {
+  color: var(--experience-accent);
+  font-size: 0.6rem;
+}
+
+.evidenceAuditChoices q {
+  color: var(--experience-ink);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.auditFeedback {
+  margin: 0.75rem 0 0;
+  padding: 0.7rem 0;
+  border-top: 1px solid var(--experience-line);
+  border-bottom: 1px solid var(--experience-line);
+  color: var(--experience-muted);
+  font-size: 0.68rem;
+  line-height: 1.5;
+}
+
+.auditFeedback[data-match="true"] {
+  color: var(--experience-accent-strong);
+}
+
+.issueChoices {
+  display: grid;
+  grid-template-columns: 11rem 1fr 1fr;
+  gap: 0.6rem;
+  align-items: stretch;
+  margin-top: 0.75rem;
+}
+
+.issueChoices > p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.66rem;
+  line-height: 1.45;
+}
+
+.recordedResponse,
+.recordedCaseResponse {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.85rem 0 0;
+  padding: 0.8rem 0;
+  border-top: 1px solid var(--experience-line);
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.recordedResponse > span,
+.recordedCaseResponse > span {
+  color: var(--experience-accent-strong);
+}
+
+.recordedResponse p,
+.recordedCaseResponse p {
+  margin: 0;
+  color: var(--experience-ink);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.recordedResponse cite,
+.recordedCaseResponse cite {
+  color: var(--experience-faint);
+  font-size: 0.6rem;
+  font-style: normal;
+}
+
+.workbenchActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.9rem;
+  margin-top: 0.8rem;
+}
+
+/* Visible reconstruction */
+
+.reconstructionLayer,
+.reentryLayer,
+.endingLayer {
+  padding: 4.7rem clamp(1.25rem, 5vw, 5rem) 3rem;
+}
+
+.reconstructionContent,
+.reentryContent,
+.endingContent {
+  width: min(100%, 76rem);
+  margin-inline: auto;
+}
+
+.reconstructionContent > header,
+.reentryContent > header {
+  display: grid;
+  max-width: 64rem;
+}
+
+.revisionComparison {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(12rem, 0.55fr) minmax(0, 1.15fr);
+  gap: 0;
+  margin-top: clamp(1.6rem, 4vh, 3rem);
+  border-top: 1px solid var(--experience-line-strong);
+  border-bottom: 1px solid var(--experience-line-strong);
+}
+
+.revisionComparison article,
+.revisionCause {
+  display: grid;
+  align-content: center;
+  gap: 0.7rem;
+  min-height: 13rem;
+  padding: clamp(1rem, 2.5vw, 2rem);
+}
+
+.revisionComparison article > span {
+  color: var(--experience-faint);
+  font-size: 0.64rem;
+}
+
+.revisionComparison article > p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: clamp(0.86rem, 1.35vw, 1.05rem);
+  line-height: 1.58;
+}
+
+.revisionComparison article:last-child {
+  background: var(--experience-accent-soft);
+}
+
+.revisionComparison article:last-child > p {
+  color: var(--experience-ink);
+}
+
+.revisionCause {
+  border-right: 1px solid var(--experience-line);
+  border-left: 1px solid var(--experience-line);
+}
+
+.revisionCause q {
+  color: var(--experience-accent-strong);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.revisionCause p {
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.64rem;
+}
+
+.recordedCaseResponse {
+  max-width: 58rem;
+  margin-top: 1.2rem;
+}
+
+.reconstructionActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: 1.1rem;
+}
+
+.reconstructionActions p {
+  max-width: 48ch;
+  margin: 0;
+  color: var(--experience-muted);
+  font-size: 0.66rem;
+  line-height: 1.5;
+}
+
+/* Uncertainty re-enters material */
+
+.reentryContent {
+  max-width: 66rem;
+}
+
+.reentryContent > article {
+  margin-top: clamp(1.8rem, 5vh, 3.5rem);
+  padding: clamp(1.2rem, 3vw, 2rem);
+  background: var(--experience-paper);
+}
+
+.reentryContent > article > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--experience-muted);
+  font-size: 0.65rem;
+}
+
+.reentryContent > article blockquote {
+  margin: 1.2rem 0 0;
+  color: var(--experience-paper-ink);
+  font-size: clamp(1.35rem, 3vw, 2.5rem);
+  line-height: 1.4;
+}
+
+.reentryPrompt {
+  max-width: 58ch;
+  margin: 1.3rem 0 0;
+  color: var(--experience-accent-strong);
+  font-size: clamp(0.9rem, 1.5vw, 1.15rem);
+  line-height: 1.55;
+}
+
+.reentryActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+/* Method receipt */
+
+.endingContent {
+  display: grid;
+  max-width: 78rem;
+}
+
+.endingContent > header {
+  display: grid;
+  grid-template-columns: minmax(7rem, 0.25fr) minmax(0, 0.75fr);
+  column-gap: clamp(1.5rem, 5vw, 5rem);
+  align-items: start;
+}
+
+.endingContent > header > span {
+  color: var(--experience-accent);
+  font-size: 0.68rem;
+}
+
+.endingContent > header h2 {
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4rem);
+  font-weight: 520;
+  letter-spacing: -0.034em;
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.endingContent > header > p {
+  grid-column: 2;
+  max-width: 60ch;
+  margin: 0.8rem 0 0;
+  color: var(--experience-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.relationReceipt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-top: 1.4rem;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--experience-line-strong);
+  border-bottom: 1px solid var(--experience-line-strong);
+}
+
+.relationReceipt p {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem;
+  margin: 0;
+}
+
+.relationReceipt strong {
+  color: var(--experience-ink);
+  font-size: 0.78rem;
+  font-weight: 560;
+}
+
+.methodReceipt {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.methodReceipt ol {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: method;
+}
+
+.methodReceipt li {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: 0.6rem;
+  min-height: 6.5rem;
+  padding: 0.7rem 0.85rem 0.8rem 0;
+  border-top: 1px solid var(--experience-line);
+  color: var(--experience-muted);
+  font-size: 0.68rem;
+  line-height: 1.5;
+  counter-increment: method;
+}
+
+.methodReceipt li::before {
+  color: var(--experience-accent);
+  font-size: 0.6rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  content: "0" counter(method);
+}
+
+.retentionReceipt {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(1.5rem, 4vw, 4rem);
+  margin-top: 1rem;
+}
+
+.retentionReceipt > div {
+  display: grid;
+  align-content: start;
+}
+
+.retentionReceipt p,
+.capabilityReceipt p {
+  margin: 0;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--experience-line);
+  color: var(--experience-muted);
+  font-size: 0.64rem;
+  line-height: 1.45;
+}
+
+.capabilityReceipt {
+  display: grid;
+  grid-template-columns: 9rem minmax(0, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.capabilityReceipt p:last-child {
+  border-bottom: 1px solid var(--experience-line);
+}
+
+.endingActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1.2rem;
+}
+
+.endingActions > button {
+  padding-inline: 0.3rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 900px) {
+  .planContent {
+    grid-template-columns: 1fr;
+    gap: 1.6rem;
+  }
+
+  .planContent header {
+    position: static;
+  }
+
+  .planContent header h2 {
+    max-width: 20ch;
+  }
+
+  .planGate {
+    grid-column: 1;
+  }
+
+  .evidenceStage,
+  .hypothesisTrack,
+  .hypothesisEvidence {
+    gap: 1.5rem;
+  }
+
+  .observationList {
+    grid-template-columns: 7rem repeat(3, minmax(0, 1fr));
+  }
+
+  .interpretationChoices,
+  .evidenceAuditChoices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .issueChoices {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .issueChoices > p {
+    grid-column: 1 / -1;
+  }
+
+  .revisionComparison {
+    grid-template-columns: 1fr 0.7fr 1.1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .methodIndicator {
+    top: 0.65rem;
+    left: 1rem;
+  }
+
+  .caseFlag {
+    top: 0.65rem;
+    right: 1rem;
+  }
+
+  .caseFlag > span {
+    display: none;
+  }
+
+  .phaseLayer {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .introLayer {
+    align-items: start;
+    padding-top: clamp(2.2rem, 8vh, 4.2rem);
+  }
+
+  .introContent h1 {
+    max-width: 11ch;
+    font-size: clamp(2.55rem, 12vw, 3.75rem);
+    line-height: 1.06;
+  }
+
+  .introLead,
+  .caseContract,
+  .introContent > .storyButton {
+    margin-left: 1.1rem;
+  }
+
+  .introLead,
+  .caseContract {
+    width: calc(100% - 1.1rem);
+  }
+
+  .introContent > .storyButton {
+    width: calc(100% - 1.1rem);
+  }
+
+  .questionLayer,
+  .planLayer,
+  .evidenceLayer,
+  .interpretationScene,
+  .reconstructionLayer,
+  .reentryLayer,
+  .endingLayer {
+    padding-top: 4.8rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .questionOwner {
+    font-size: 0.68rem;
+  }
+
+  .question {
+    max-width: none;
+    font-size: clamp(1.9rem, 8.8vw, 2.75rem);
+    line-height: 1.16;
+  }
+
+  .questionBoundary {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+    margin-top: 1.5rem;
+  }
+
+  .questionContent > .storyButton,
+  .planGate .storyButton,
+  .evidenceNavigation .storyButton,
+  .reconstructionActions .storyButton,
+  .reentryActions .storyButton {
+    width: 100%;
+  }
+
+  .planContent h2,
+  .collectionContent h2,
+  .interpretationContent h2,
+  .reconstructionContent h2,
+  .reentryContent h2 {
+    font-size: clamp(1.75rem, 8vw, 2.6rem);
+  }
+
+  .evidencePlan li {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .planGate {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .collectionLayer {
+    padding: 4rem 1.25rem;
+  }
+
+  .evidenceContent {
+    display: block;
+  }
+
+  .evidenceSceneHeader {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .evidenceSceneHeader p {
+    max-width: none;
+    text-align: left;
+  }
+
+  .memoryFragment {
+    margin-top: 1.2rem;
+  }
+
+  .evidenceStage {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .memoryPaper {
+    min-height: 13.5rem;
+  }
+
+  .memoryQuote {
+    font-size: 1rem;
+    -webkit-line-clamp: 5;
+  }
+
+  .evidenceMethod > p {
+    grid-template-columns: 7rem minmax(0, 1fr);
+    font-size: 0.7rem;
+  }
+
+  .evidenceBoundary {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .evidenceNavigation {
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 1rem;
+  }
+
+  .memoryDetailBackdrop {
+    padding: 0.65rem;
+  }
+
+  .memoryDetail {
+    max-height: 88vh;
+    padding: 1.1rem;
+  }
+
+  .memoryDetailQuote {
+    font-size: 1.3rem;
+  }
+
+  .detailMethod > p {
+    grid-template-columns: 1fr;
+    gap: 0.35rem;
+  }
+
+  .interpretationContent > header {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .observationList {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .hypothesisTrack,
+  .hypothesisEvidence {
+    grid-template-columns: 1fr;
+  }
+
+  .candidateHypothesis {
+    padding: 1rem;
+  }
+
+  .correctionHeading,
+  .workbenchHeading {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .interpretationChoices,
+  .evidenceAuditChoices,
+  .issueChoices {
+    grid-template-columns: 1fr;
+  }
+
+  .issueChoices > p {
+    grid-column: 1;
+  }
+
+  .workbenchActions,
+  .reconstructionActions,
+  .reentryActions,
+  .endingActions {
+    display: grid;
+    gap: 0.7rem;
+  }
+
+  .workbenchActions .storyButton,
+  .endingActions .storyButton {
+    width: 100%;
+  }
+
+  .revisionComparison {
+    grid-template-columns: 1fr;
+  }
+
+  .revisionComparison article,
+  .revisionCause {
+    min-height: 0;
+  }
+
+  .revisionCause {
+    border-top: 1px solid var(--experience-line);
+    border-right: 0;
+    border-bottom: 1px solid var(--experience-line);
+    border-left: 0;
+  }
+
+  .reentryContent > article > div {
+    display: grid;
+  }
+
+  .endingContent > header {
+    grid-template-columns: 1fr;
+    gap: 0.6rem;
+  }
+
+  .endingContent > header > p {
+    grid-column: 1;
+  }
+
+  .relationReceipt,
+  .retentionReceipt {
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .relationReceipt p,
+  .methodReceipt,
+  .capabilityReceipt {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .methodReceipt ol {
+    display: grid;
+  }
+
+  .methodReceipt li {
+    min-height: 0;
+    padding: 0.28rem 0;
+    border-top: 1px solid var(--experience-line);
+  }
+
+  .methodReceipt li::before {
+    display: none;
+  }
+}
+
+@media (max-height: 700px) and (min-width: 701px) {
+  .introLayer,
+  .questionLayer,
+  .planLayer,
+  .evidenceLayer,
+  .interpretationScene,
+  .reconstructionLayer,
+  .reentryLayer,
+  .endingLayer {
+    padding-top: 4.4rem;
+  }
+
+  .introContent h1 {
+    font-size: clamp(2.4rem, 4.8vw, 4.2rem);
+  }
+
+  .caseContract {
+    margin-top: 1.2rem;
+  }
+
+  .memoryPaper {
+    min-height: 13rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .experience *,
+  .experience *::before,
+  .experience *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .ambientField,
+  .phaseLayer,
+  .memoryFragment,
+  .memoryDetailBackdrop,
+  .memoryDetail {
+    filter: none !important;
+  }
+}
