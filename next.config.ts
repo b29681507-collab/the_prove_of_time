@@ -1,8 +1,14 @@
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
-  /* config options here */
-  output: "standalone",
-};
+const pagesBuild = process.env.GITHUB_PAGES === "true";
+
+const nextConfig: NextConfig = pagesBuild
+  ? {
+      output: "export",
+      basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
+      trailingSlash: true,
+      images: { unoptimized: true },
+    }
+  : { output: "standalone" };
 
 export default nextConfig;

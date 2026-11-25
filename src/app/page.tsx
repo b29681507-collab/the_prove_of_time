@@ -1,21 +1,19 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-
-import { HomeScrollStory } from "@/components/home-scroll-story";
+import { ScreeningRoom } from "@/components/screening-room";
+import { screeningDays } from "@/components/screening-materials";
 
 const smileySans = localFont({
   src: "./fonts/smiley-sans/SmileySans-Oblique.ttf.woff2",
   display: "swap",
-  style: "normal",
   variable: "--font-smiley-sans",
-  weight: "400",
 });
 
 export const metadata: Metadata = {
-  title: "The Prove of Time: 第一页滚动叙事",
-  description: "当你只有一个问题、却不知道应该回到哪里时，让 AI 把真正相关的过去带回面前。",
+  title: "回织",
+  description: "从 7 月 6 日到 15 日，翻看 blonded 每天留下的五条记录。",
 };
 
 export default function Home() {
-  return <HomeScrollStory fontClassName={smileySans.variable} />;
+  return <ScreeningRoom days={screeningDays} fontClassName={smileySans.variable} />;
 }

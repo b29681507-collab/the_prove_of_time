@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { V4MotionLab } from "@/components/v4-motion-lab";
+import { WeavingRoom } from "@/components/weaving/weaving-room";
+import { closingLine, weavingRounds } from "@/components/weaving/weaving-script";
 
 export const metadata: Metadata = {
-  title: "真实记录体验 - The Prove of Time",
-  description: "用一段真实项目记录体验发问、回顾、纠正与暂时答案。",
+  title: "回织 · 回到今天",
+  description: "听 blonded 和 AI 对话，翻看他们递回来的真实记录。",
 };
 
 export default function ExperiencePage() {
-  return <V4MotionLab />;
+  return <WeavingRoom rounds={weavingRounds} closingLine={closingLine} />;
 }

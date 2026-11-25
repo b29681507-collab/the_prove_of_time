@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 246 110" width="246" height="110" role="img" aria-labelledby="name">
+  <title id="name">回织</title>
+  <g fill="#eee9da">
+    <!-- The folded outer sheet and its inset frame share a clipped corner. -->
+    <path d="M4 13 15 8H105V70L91 72V15H19V94H91V82L105 80V94L95 101H4Z"/>
+    <path fill-rule="evenodd" d="M31 36 41 31H79V72L70 78H31ZM44 38V71H66V38Z"/>
+    <!-- Two folded silk strokes. The last rising stroke is the returning thread. -->
+    <path d="M151 3 164 7 139 42 147 41 141 49 121 53 119 46Z"/>
+    <path d="M160 28 172 33 140 69 162 64 157 72 124 81 121 73Z"/>
+    <path fill-rule="evenodd" d="M176 17 186 12H240V62L230 69H176ZM189 19V62H226V19Z"/>
+    <path d="M187 76 202 81Q193 94 171 106L167 102Q181 89 187 76Z"/>
+    <path d="M217 79 222 75Q236 84 245 96L233 105Q227 90 217 79Z"/>
+  </g>
+  <path fill="#efc276" d="M26 85 92 73 103 72Q112 70 117 76L128 89 165 78 161 86 126 100 114 82Q111 77 103 78L92 79Z"/>
+</svg>

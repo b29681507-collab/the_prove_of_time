@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "The Prove of Time — Inquiry Motion Lab",
-  description: "A motion study of asking, returning to past material, correcting AI, and reaching an answer or no answer.",
+  title: "回织 · 私人放映室",
+  description: "沿日期回看 blonded 留下的日记、对话和对自己物件的回顾。",
 };
 
 export default function RootLayout({
